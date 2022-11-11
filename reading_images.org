@@ -1,0 +1,244 @@
+#+Title: Reading image data files using python
+#+Author: Daniele Arosio - This post was written entirely in org-mode and ob-ipython. You can [download]] this notebook.
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
+
+
+#+BEGIN_SRC python :results none
+import numpy
+#+END_SRC
+
+#+BEGIN_SRC ipython :session
+import scipy.ndimage
+import matplotlib.pyplot as plt
+import matplotlib.image
+import matplotlib
+%matplotlib inline
+#+END_SRC
+
+#+RESULTS:
+
+* Limitation of scipy.ndimage and matplotlib.image
+Using imread() from either scipy.ndimage or maptplotlib.image results in
+importing only the first image of a tif (multichannel) time sequence.
+
+** scipy
+ #+BEGIN_SRC ipython :session :results output :exports both
+ im = scipy.ndimage.imread("/home/dati/GBM_persson/data/15.02.05_cal-GBM5-pBJclop/ph633/1_20_40.tif")
+ print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
+ #+END_SRC
+
+ #+RESULTS:
+ : ndim =  2 
+ : shape =  (1038, 1388) 
+ : max =  3405
+ #+BEGIN_SRC ipython :session :file f1.png :exports both
+ plt.imshow(im)
+ #+END_SRC
+
+ #+RESULTS:
+ [[file:f1.png]]
+
+** matplotlib
+
+#+BEGIN_SRC ipython :session :results output :exports both
+  im = matplotlib.image.imread("/home/dati/GBM_persson/data/15.02.05_cal-GBM5-pBJclop/ph633/1_20_40.tif")
+  print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
+#+END_SRC
+
+#+RESULTS:
+: ndim =  2 
+: shape =  (1038, 1388) 
+: max =  3405
+
+#+BEGIN_SRC ipython :session :file f2.png : 2exports both
+plt.imshow(im, cmap=matplotlib.viridis)
+#+END_SRC
+
+   #+RESULTS:
+   [[file:f2.png]]
+
+
+* scikit-image
+
+#+BEGIN_SRC ipython :session :results output :exports both
+  from skimage import io
+  im = io.imread("/home/dati/GBM_persson/data/15.02.05_cal-GBM5-pBJclop/ph633/1_20_40.tif")
+  print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
+#+END_SRC
+
+#+RESULTS:
+: ndim =  3 
+: shape =  (20, 1038, 1388) 
+: max =  3578
+
+#+BEGIN_SRC ipython :session :file f3.png :exports both
+plt.imshow(im[0])
+#+END_SRC
+
+#+RESULTS:
+[[file:f3.png]]
+
+* Other two options
+
+** tifffile
+
+#+BEGIN_SRC ipython :session :results output :exports both
+import tifffile
+im = tifffile.imread("/home/dati/GBM_persson/data/15.02.05_cal-GBM5-pBJclop/ph633/1_20_40.tif")
+print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
+#+END_SRC
+
+#+RESULTS:
+: ndim =  3 
+: shape =  (20, 1038, 1388) 
+: max =  3578
+
+#+BEGIN_SRC ipython :session :file f4.png :exports both
+tifffile.imshow(im)
+#+END_SRC
+
+#+RESULTS:
+[[file:f4.png]]
+
+*** Tiles
+
+#+BEGIN_SRC ipython :session :results output :exports both
+  im = tifffile.imread("/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif")
+  im[0].TiffPage()
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC ipython :session :results output :exports both
+  with tifffile.TiffFile('/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif') as tif:
+    print(tif)
+    images = tif.asarray()
+    for page in tif:
+      print(page.axes)
+      # tifffile.tifffile.TiffPage(page)
+      for tag in page.tags.values():
+        t = tag.name, tag.value
+      image = page.asarray()
+  print(image)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+TIFF file: SHA256E-s43989163--ea6be4f70a5276fb918715b492ad544da90a1a917cf8931e44306d60f070eaa2.tif, 42 MiB, little endian, 81 pages
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+[[1390 1401 1508 ..., 1109 1267 1087]
+ [1565 1718 1910 ..., 1793 1618 1753]
+ [1790 1808 2019 ..., 1950 1968 1892]
+ ..., 
+ [1626 1740 1773 ..., 1831 1776 1848]
+ [1644 1805 1743 ..., 1701 1884 1711]
+ [1587 1655 1831 ..., 1786 1968 1886]]
+#+end_example
+
+** bioformat
+
+
+#+BEGIN_SRC ipython :session :results output :exports both
+  import javabridge
+  import bioformats
+  javabridge.start_vm(class_path=bioformats.JARS)
+  path = "/home/dati/GBM_persson/data/15.02.05_cal-GBM5-pBJclop/ph633/1_20_40.tif"
+  imagedata = bioformats.ImageReader(path)
+  image_desc = bioformats.get_omexml_metadata(path)
+  image_desc = bioformats.OMEXML(image_desc)
+  num_images = image_desc.get_image_count()
+
+  javabridge.kill_vm()
+#+END_SRC
+
+#+RESULTS:
+
+
+* Conclusions
+
+Scikit-image is the winner (over scipy.ndimage and matplotlib.image) when importing microscopy data tiff stacks (multiplanes, multichannels, multitime points).
+
+skimage conventions are [[http://scikit-image.org/docs/dev/user_guide/numpy_images.html#coordinate-conventions][here]].
+
+

@@ -1,0 +1,6 @@
+* Collection of my =notebooks=
+:PROPERTIES:
+:CUSTOM_ID: collection-of-my-notebooks
+:END:
+I was using pelican post and ipython-notebook. Blog hosted on
+bitbucket.org (now bitbucket.io).
