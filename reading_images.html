@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title>Reading image data in python</title>
-<!-- 2022-11-11 Fri 06:23 -->
+<!-- 2022-11-12 Sat 11:13 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="generator" content="Org-mode">
@@ -223,6 +223,14 @@ $(function() {
 </pre>
 </div>
 
+<div class="org-src-container">
+
+<pre class="src src-emacs-lisp">(concat <span style="color: #e67128;">"\"./docs/"</span> (file-name-nondirectory (file-name-sans-extension (buffer-file-name))) <span style="color: #e67128;">".html\""</span>)
+</pre>
+</div>
+
+
+
 <div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1"><span class="section-number-2">1</span> Limitation of scipy.ndimage and matplotlib.image</h2>
 <div class="outline-text-2" id="text-1">
@@ -235,18 +243,31 @@ importing only the first image of a tif (multichannel) time sequence.
 <div id="outline-container-sec-1-1" class="outline-3">
 <h3 id="sec-1-1"><span class="section-number-3">1.1</span> imageio.imread reads 3D properly</h3>
 <div class="outline-text-3" id="text-1-1">
+<div class="org-src-container">
+
+<pre class="src src-jupyter-python"><span style="color: #ffad29; font-weight: bold;">import</span> imageio
+<span style="color: #dbdb95;">im</span> = imageio.v3.imread(<span style="color: #e67128;">"/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif"</span>)
+<span style="color: #23d7d7;">print</span>(<span style="color: #e67128;">"ndim = "</span>, im.ndim, <span style="color: #e67128;">"\nshape = "</span>, im.shape, <span style="color: #e67128;">'\nmax = '</span>, im.<span style="color: #23d7d7;">max</span>())
+plt.imshow(im[0][0])
+</pre>
+</div>
+
 <p>
 As ndimage.imread does not exist anymore.
 </p>
 
-<div class="org-src-container">
-
-<pre class="src src-jupyter-python"><span style="color: #ffad29; font-weight: bold;">import</span> imageio
-<span style="color: #dbdb95;">im</span> = imageio.v2.imread(<span style="color: #e67128;">"/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif"</span>)
-<span style="color: #23d7d7;">print</span>(<span style="color: #e67128;">"ndim = "</span>, im.ndim, <span style="color: #e67128;">"\nshape = "</span>, im.shape, <span style="color: #e67128;">'\nmax = '</span>, im.<span style="color: #23d7d7;">max</span>())
-plt.imshow(im[0])
+<pre class="example">
+ndim =  4 
+shape =  (5, 3, 512, 512) 
+max =  4886
+&lt;matplotlib.image.AxesImage at 0x7f396d549110&gt;
 </pre>
-</div>
+
+
+<figure>
+<p><img src="./.ob-jupyter/75eea9684457c4d04221c5d99f820d576a958bc2.png" class="img-responsive" alt="75eea9684457c4d04221c5d99f820d576a958bc2.png">
+</p>
+</figure>
 </div>
 </div>
 
@@ -260,18 +281,6 @@ plt.imshow(im[0])
 plt.imshow(im)
 </pre>
 </div>
-
-<pre class="example">
-ndim =  2 
-shape =  (512, 512) 
-max =  4886
-</pre>
-
-
-<figure>
-<p><img src="f2.png" class="img-responsive" alt="f2.png">
-</p>
-</figure>
 </div>
 </div>
 </div>
@@ -293,12 +302,6 @@ ndim =  4
 shape =  (5, 512, 512, 3) 
 max =  4886
 </pre>
-
-
-<figure>
-<p><img src="f3.png" class="img-responsive" alt="f3.png">
-</p>
-</figure>
 </div>
 </div>
 
@@ -316,18 +319,6 @@ max =  4886
 tifffile.imshow(im)
 </pre>
 </div>
-
-<pre class="example">
-ndim =  4 
-shape =  (5, 3, 512, 512) 
-max =  4886
-</pre>
-
-
-<figure>
-<p><img src="f4.png" class="img-responsive" alt="f4.png">
-</p>
-</figure>
 </div>
 
 <div id="outline-container-sec-3-1-1" class="outline-4">
@@ -336,164 +327,40 @@ max =  4886
 <div class="org-src-container">
 
 <pre class="src src-jupyter-python"><span style="color: #dbdb95;">im</span> = tifffile.imread(<span style="color: #e67128;">"/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif"</span>)
-im[0].TiffPage()
+im
 </pre>
 </div>
-
-<pre class="example">
----------------------------------------------------------------------------
-FileNotFoundError                         Traceback (most recent call last)
-Cell In [94], line 1
-----&gt; 1 im = tifffile.imread("/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif")
-      2 im[0].TiffPage()
-
-File ~/.pyenv/versions/3.11.0/envs/py311/lib/python3.11/site-packages/tifffile/tifffile.py:1008, in imread(files, aszarr, key, series, level, squeeze, maxworkers, mode, name, offset, size, pattern, axesorder, categories, imread, sort, container, axestiled, ioworkers, chunkmode, fillvalue, zattrs, multiscales, omexml, out, _multifile, _useframes, **kwargs)
-   1003     files = files[0]
-   1005 if isinstance(files, str) or not isinstance(
-   1006     files, collections.abc.Sequence
-   1007 ):
--&gt; 1008     with TiffFile(
-   1009         files,
-   1010         mode=mode,
-   1011         name=name,
-   1012         offset=offset,
-   1013         size=size,
-   1014         omexml=omexml,
-   1015         _multifile=_multifile,
-   1016         _useframes=_useframes,
-   1017         **is_flags,
-   1018     ) as tif:
-   1019         if aszarr:
-   1020             assert key is None or isinstance(key, int)
-
-File ~/.pyenv/versions/3.11.0/envs/py311/lib/python3.11/site-packages/tifffile/tifffile.py:3832, in TiffFile.__init__(self, file, mode, name, offset, size, omexml, _multifile, _useframes, _parent, **is_flags)
-   3829 if mode not in (None, 'r', 'r+', 'rb', 'r+b'):
-   3830     raise ValueError(f'invalid mode {mode!r}')
--&gt; 3832 fh = FileHandle(file, mode=mode, name=name, offset=offset, size=size)
-   3833 self._fh = fh
-   3834 self._multifile = True if _multifile is None else bool(_multifile)
-
-File ~/.pyenv/versions/3.11.0/envs/py311/lib/python3.11/site-packages/tifffile/tifffile.py:13088, in FileHandle.__init__(self, file, mode, name, offset, size)
-  13086 self._close = True
-  13087 self._lock = NullContext()
-&gt; 13088 self.open()
-  13089 assert self._fh is not None
-
-File ~/.pyenv/versions/3.11.0/envs/py311/lib/python3.11/site-packages/tifffile/tifffile.py:13103, in FileHandle.open(self)
-  13101 self._file = os.path.realpath(self._file)
-  13102 self._dir, self._name = os.path.split(self._file)
-&gt; 13103 self._fh = open(self._file, self._mode)  # type: ignore
-  13104 self._close = True
-  13105 if self._offset &lt; 0:
-
-FileNotFoundError: [Errno 2] No such file or directory: '/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif'
-</pre>
 
 <div class="org-src-container">
 
-<pre class="src src-ipython">  with tifffile.TiffFile('/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif') as tif:
-    print(tif)
+<pre class="src src-jupyter-python">  <span style="color: #ffad29; font-weight: bold;">with</span> tifffile.TiffFile(<span style="color: #e67128;">'/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif'</span>) <span style="color: #ffad29; font-weight: bold;">as</span> <span style="color: #dbdb95;">tif</span>:
+    <span style="color: #23d7d7;">print</span>(tif)
     images = tif.asarray()
-    for page in tif:
-      print(page.axes)
-      # tifffile.tifffile.TiffPage(page)
-      for tag in page.tags.values():
+    <span style="color: #ffad29; font-weight: bold;">for</span> page <span style="color: #ffad29; font-weight: bold;">in</span> <span style="color: #dbdb95;">tif</span>:
+      <span style="color: #23d7d7;">print</span>(page.axes)
+      <span style="color: #74af68;"># </span><span style="color: #74af68;">tifffile.tifffile.TiffPage(page)</span>
+      <span style="color: #ffad29; font-weight: bold;">for</span> tag <span style="color: #ffad29; font-weight: bold;">in</span> page.tags.values():
         t = tag.name, tag.value
-      image = page.asarray()
-  print(image)
+      <span style="color: #dbdb95;">image</span> = page.asarray()
+  <span style="color: #23d7d7;">print</span>(image)
 </pre>
 </div>
 
 <pre class="example">
-TIFF file: SHA256E-s43989163--ea6be4f70a5276fb918715b492ad544da90a1a917cf8931e44306d60f070eaa2.tif, 42 MiB, little endian, 81 pages
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
+TiffFile 'SHA256…aa2.tif'  41.95 MiB  ome multipage uniform  81 Pages  9 Series
+</pre>
 
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-[[1390 1401 1508 ..., 1109 1267 1087]
- [1565 1718 1910 ..., 1793 1618 1753]
- [1790 1808 2019 ..., 1950 1968 1892]
- ..., 
- [1626 1740 1773 ..., 1831 1776 1848]
- [1644 1805 1743 ..., 1701 1884 1711]
- [1587 1655 1831 ..., 1786 1968 1886]]
+<pre class="example">
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+Cell In [316], line 4
+      2 print(tif)
+      3 images = tif.asarray()
+----&gt; 4 for page in tif:
+      5   print(page.axes)
+      6   # tifffile.tifffile.TiffPage(page)
+
+TypeError: 'TiffFile' object is not iterable
 </pre>
 </div>
 </div>
@@ -520,7 +387,7 @@ javabridge.kill_vm()
 <pre class="example">
 ---------------------------------------------------------------------------
 ModuleNotFoundError                       Traceback (most recent call last)
-Cell In [95], line 1
+Cell In [317], line 1
 ----&gt; 1 import javabridge
       2 import bioformats
       3 javabridge.start_vm(class_path=bioformats.JARS)
@@ -546,7 +413,7 @@ skimage conventions are <a href="http://scikit-image.org/docs/dev/user_guide/num
 </div></div></div>
 <footer id="postamble" class="">
 <div><p class="author">Author: Daniele Arosio - This post was written entirely in org-mode and ob-ipython. You can download this notebook.</p>
-<p class="date">Created: 2022-11-11 Fri 06:23</p>
+<p class="date">Created: 2022-11-12 Sat 11:13</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="http://orgmode.org">Org-mode</a> 9.5.5)</p>
 </div>
 </footer>
