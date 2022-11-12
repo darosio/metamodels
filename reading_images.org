@@ -1,0 +1,158 @@
+#+Title: Reading image data in python
+#+Author: Daniele Arosio - This post was written entirely in org-mode and ob-ipython. You can download this notebook.
+# #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
+#+EXPORT_FILE_NAME: output/reading_images.html
+
+#+begin_src jupyter-python
+import numpy
+from scipy import ndimage
+import matplotlib.pyplot as plt
+import matplotlib.image
+import matplotlib
+#+end_src
+
+#+begin_src emacs-lisp
+(concat "\"./docs/" (file-name-nondirectory (file-name-sans-extension (buffer-file-name))) ".html\"")
+#+end_src
+
+
+
+* Limitation of scipy.ndimage and matplotlib.image
+Using imread() from either scipy.ndimage or maptplotlib.image results in
+importing only the first image of a tif (multichannel) time sequence.
+
+** imageio.imread reads 3D properly
+
+#+BEGIN_SRC jupyter-python :file img/f1.png
+import imageio
+im = imageio.v3.imread("/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif")
+print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
+plt.imshow(im[0][0])
+ #+END_SRC
+
+As ndimage.imread does not exist anymore.
+
+ #+RESULTS:
+ :RESULTS:
+ : ndim =  4 
+ : shape =  (5, 3, 512, 512) 
+ : max =  4886
+ : <matplotlib.image.AxesImage at 0x7f396d549110>
+ [[file:./.ob-jupyter/75eea9684457c4d04221c5d99f820d576a958bc2.png]]
+ :END:
+
+** matplotlib
+
+#+BEGIN_SRC jupyter-python :file img/f2.png
+im = matplotlib.image.imread("/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif")
+print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
+plt.imshow(im)
+#+END_SRC
+
+#+RESULTS:
+:RESULTS:
+: ndim =  2 
+: shape =  (512, 512) 
+: max =  4886
+[[file:f2.png]]
+:END:
+
+* scikit-image
+
+#+BEGIN_SRC jupyter-python :results output :exports both :file img/f3.png
+from skimage import io
+im = io.imread("/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif")
+print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
+plt.imshow(im[0,:,:,0])
+#+END_SRC
+
+#+RESULTS:
+:RESULTS:
+: ndim =  4 
+: shape =  (5, 512, 512, 3) 
+: max =  4886
+[[file:f3.png]]
+:END:
+
+* Other two options
+
+** tifffile
+
+#+BEGIN_SRC jupyter-python :file img/f4.png
+import tifffile
+im = tifffile.imread("/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif")
+print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
+tifffile.imshow(im)
+#+END_SRC
+
+#+RESULTS:
+:RESULTS:
+: ndim =  4 
+: shape =  (5, 3, 512, 512) 
+: max =  4886
+[[file:./.ob-jupyter/be9ebb88151c984e2e5e934964ca12e42ebac776.png]]
+:END:
+
+*** Tiles
+
+#+BEGIN_SRC jupyter-python :results output :exports both
+im = tifffile.imread("/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif")
+im
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC jupyter-python :results output :exports both
+  with tifffile.TiffFile('/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif') as tif:
+    print(tif)
+    images = tif.asarray()
+    for page in tif:
+      print(page.axes)
+      # tifffile.tifffile.TiffPage(page)
+      for tag in page.tags.values():
+        t = tag.name, tag.value
+      image = page.asarray()
+  print(image)
+#+END_SRC
+
+#+RESULTS:
+:RESULTS:
+: TiffFile 'SHA256…aa2.tif'  41.95 MiB  ome multipage uniform  81 Pages  9 Series
+# [goto error]
+: [0;31m---------------------------------------------------------------------------[0m
+: [0;31mTypeError[0m                                 Traceback (most recent call last)
+: Cell [0;32mIn [165], line 4[0m
+: [1;32m      2[0m [38;5;28mprint[39m(tif)
+: [1;32m      3[0m images [38;5;241m=[39m tif[38;5;241m.[39masarray()
+: [0;32m----> 4[0m [38;5;28;01mfor[39;00m page [38;5;129;01min[39;00m tif:
+: [1;32m      5[0m   [38;5;28mprint[39m(page[38;5;241m.[39maxes)
+: [1;32m      6[0m   [38;5;66;03m# tifffile.tifffile.TiffPage(page)[39;00m
+: 
+: [0;31mTypeError[0m: 'TiffFile' object is not iterable
+:END:
+
+** bioformat
+
+#+BEGIN_SRC jupyter-python :results output :exports both
+import javabridge
+import bioformats
+javabridge.start_vm(class_path=bioformats.JARS)
+path = "/home/dati/GBM_persson/data/15.02.05_cal-GBM5-pBJclop/ph633/1_20_40.tif"
+imagedata = bioformats.ImageReader(path)
+image_desc = bioformats.get_omexml_metadata(path)
+image_desc = bioformats.OMEXML(image_desc)
+num_images = image_desc.get_image_count()
+
+javabridge.kill_vm()
+#+END_SRC
+
+#+RESULTS:
+
+* Conclusions
+
+Scikit-image is the winner (over scipy.ndimage and matplotlib.image) when importing microscopy data tiff stacks (multiplanes, multichannels, multitime points).
+
+skimage conventions are [[http://scikit-image.org/docs/dev/user_guide/numpy_images.html#coordinate-conventions][here]].
+
+
