@@ -16,9 +16,8 @@ import matplotlib
 (concat "\"./docs/" (file-name-nondirectory (file-name-sans-extension (buffer-file-name))) ".html\"")
 #+end_src
 
+* Limitation of matplotlib.pyplot.imread
 
-
-* Limitation of scipy.ndimage and matplotlib.image
 Using imread() from either scipy.ndimage or maptplotlib.image results in
 importing only the first image of a tif (multichannel) time sequence.
 
@@ -31,16 +30,16 @@ print("ndim = ", im.ndim, "\nshape = ", im.shape, '\nmax = ', im.max())
 plt.imshow(im[0][0])
  #+END_SRC
 
-As ndimage.imread does not exist anymore.
-
  #+RESULTS:
  :RESULTS:
  : ndim =  4 
  : shape =  (5, 3, 512, 512) 
  : max =  4886
- : <matplotlib.image.AxesImage at 0x7f396d549110>
- [[file:./.ob-jupyter/75eea9684457c4d04221c5d99f820d576a958bc2.png]]
+ : <matplotlib.image.AxesImage at 0x7f396b1c9810>
+ [[file:img/f1.png]]
  :END:
+
+As ndimage.imread does not exist anymore.
 
 ** matplotlib
 
@@ -55,7 +54,8 @@ plt.imshow(im)
 : ndim =  2 
 : shape =  (512, 512) 
 : max =  4886
-[[file:f2.png]]
+: <matplotlib.image.AxesImage at 0x7f396a102850>
+[[file:img/f2.png]]
 :END:
 
 * scikit-image
