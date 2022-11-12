@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title>Reading image data in python</title>
-<!-- 2022-11-12 Sat 11:40 -->
+<!-- 2022-11-12 Sat 11:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="generator" content="Org-mode">
@@ -278,6 +278,18 @@ As ndimage.imread does not exist anymore.
 plt.imshow(im)
 </pre>
 </div>
+
+<pre class="example">
+ndim =  2 
+shape =  (512, 512) 
+max =  4886
+</pre>
+
+
+<figure>
+<p><img src="img/f2.png" class="img-responsive" alt="f2.png">
+</p>
+</figure>
 </div>
 </div>
 </div>
@@ -322,6 +334,18 @@ max =  4886
 tifffile.imshow(im)
 </pre>
 </div>
+
+<pre class="example">
+ndim =  4 
+shape =  (5, 3, 512, 512) 
+max =  4886
+</pre>
+
+
+<figure>
+<p><img src="img/f4.png" class="img-responsive" alt="f4.png">
+</p>
+</figure>
 </div>
 
 <div id="outline-container-sec-3-1-1" class="outline-4">
@@ -330,44 +354,38 @@ tifffile.imshow(im)
 <div class="org-src-container">
 
 <pre class="src src-jupyter-python"><span style="color: #dbdb95;">im</span> = tifffile.imread(<span style="color: #e67128;">"/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif"</span>)
-im
+tifffile.imshow(im)
 </pre>
 </div>
 
+
+<figure>
+<p><img src="img/f5.png" class="img-responsive" alt="f5.png">
+</p>
+</figure>
+
 <div class="org-src-container">
 
-<pre class="src src-jupyter-python">  <span style="color: #ffad29; font-weight: bold;">with</span> tifffile.TiffFile(<span style="color: #e67128;">'/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif'</span>) <span style="color: #ffad29; font-weight: bold;">as</span> <span style="color: #dbdb95;">tif</span>:
+<pre class="src src-jupyter-python"><span style="color: #ffad29; font-weight: bold;">with</span> tifffile.TiffFile(<span style="color: #e67128;">'/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif'</span>) <span style="color: #ffad29; font-weight: bold;">as</span> <span style="color: #dbdb95;">tif</span>:
     <span style="color: #23d7d7;">print</span>(tif)
     images = tif.asarray()
-    <span style="color: #ffad29; font-weight: bold;">for</span> page <span style="color: #ffad29; font-weight: bold;">in</span> <span style="color: #dbdb95;">tif</span>:
-      <span style="color: #23d7d7;">print</span>(page.axes)
-      <span style="color: #74af68;"># </span><span style="color: #74af68;">tifffile.tifffile.TiffPage(page)</span>
-      <span style="color: #ffad29; font-weight: bold;">for</span> tag <span style="color: #ffad29; font-weight: bold;">in</span> page.tags.values():
-        t = tag.name, tag.value
-      <span style="color: #dbdb95;">image</span> = page.asarray()
-  <span style="color: #23d7d7;">print</span>(image)
+    <span style="color: #74af68;"># </span><span style="color: #74af68;">for page in tif:</span>
+    <span style="color: #74af68;">#     </span><span style="color: #74af68;">print(page.axes)</span>
+    <span style="color: #74af68;">#     </span><span style="color: #74af68;"># tifffile.tifffile.TiffPage(page)</span>
+    <span style="color: #74af68;">#     </span><span style="color: #74af68;"># for tag in page.tags.values():</span>
+    <span style="color: #74af68;">#     </span><span style="color: #74af68;">#   t = tag.name, tag.value</span>
+    <span style="color: #74af68;">#     </span><span style="color: #74af68;">image = page.asarray()</span>
+    <span style="color: #74af68;">#     </span><span style="color: #74af68;">print(image)</span>
 </pre>
 </div>
 
 <pre class="example">
 TiffFile 'SHA256…aa2.tif'  41.95 MiB  ome multipage uniform  81 Pages  9 Series
 </pre>
+</div>
+</div>
+</div>
 
-<pre class="example">
----------------------------------------------------------------------------
-TypeError                                 Traceback (most recent call last)
-Cell In [352], line 4
-      2 print(tif)
-      3 images = tif.asarray()
-----&gt; 4 for page in tif:
-      5   print(page.axes)
-      6   # tifffile.tifffile.TiffPage(page)
-
-TypeError: 'TiffFile' object is not iterable
-</pre>
-</div>
-</div>
-</div>
 
 <div id="outline-container-sec-3-2" class="outline-3">
 <h3 id="sec-3-2"><span class="section-number-3">3.2</span> bioformat</h3>
@@ -390,7 +408,7 @@ javabridge.kill_vm()
 <pre class="example">
 ---------------------------------------------------------------------------
 ModuleNotFoundError                       Traceback (most recent call last)
-Cell In [353], line 1
+Cell In [375], line 1
 ----&gt; 1 import javabridge
       2 import bioformats
       3 javabridge.start_vm(class_path=bioformats.JARS)
@@ -416,7 +434,7 @@ skimage conventions are <a href="http://scikit-image.org/docs/dev/user_guide/num
 </div></div></div>
 <footer id="postamble" class="">
 <div><p class="author">Author: Daniele Arosio - This post was written entirely in org-mode and ob-ipython. You can download this notebook.</p>
-<p class="date">Created: 2022-11-12 Sat 11:40</p>
+<p class="date">Created: 2022-11-12 Sat 11:46</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="http://orgmode.org">Org-mode</a> 9.5.5)</p>
 </div>
 </footer>
