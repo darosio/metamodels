@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title>Reading image data in python</title>
-<!-- 2022-11-12 Sat 11:13 -->
+<!-- 2022-11-12 Sat 11:29 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="generator" content="Org-mode">
@@ -255,19 +255,6 @@ plt.imshow(im[0][0])
 <p>
 As ndimage.imread does not exist anymore.
 </p>
-
-<pre class="example">
-ndim =  4 
-shape =  (5, 3, 512, 512) 
-max =  4886
-&lt;matplotlib.image.AxesImage at 0x7f396d549110&gt;
-</pre>
-
-
-<figure>
-<p><img src="./.ob-jupyter/75eea9684457c4d04221c5d99f820d576a958bc2.png" class="img-responsive" alt="75eea9684457c4d04221c5d99f820d576a958bc2.png">
-</p>
-</figure>
 </div>
 </div>
 
@@ -302,6 +289,12 @@ ndim =  4
 shape =  (5, 512, 512, 3) 
 max =  4886
 </pre>
+
+
+<figure>
+<p><img src="img/f3.png" class="img-responsive" alt="f3.png">
+</p>
+</figure>
 </div>
 </div>
 
@@ -353,7 +346,7 @@ TiffFile 'SHA256…aa2.tif'  41.95 MiB  ome multipage uniform  81 Pages  9 Serie
 <pre class="example">
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
-Cell In [316], line 4
+Cell In [327], line 4
       2 print(tif)
       3 images = tif.asarray()
 ----&gt; 4 for page in tif:
@@ -387,7 +380,7 @@ javabridge.kill_vm()
 <pre class="example">
 ---------------------------------------------------------------------------
 ModuleNotFoundError                       Traceback (most recent call last)
-Cell In [317], line 1
+Cell In [328], line 1
 ----&gt; 1 import javabridge
       2 import bioformats
       3 javabridge.start_vm(class_path=bioformats.JARS)
@@ -413,7 +406,7 @@ skimage conventions are <a href="http://scikit-image.org/docs/dev/user_guide/num
 </div></div></div>
 <footer id="postamble" class="">
 <div><p class="author">Author: Daniele Arosio - This post was written entirely in org-mode and ob-ipython. You can download this notebook.</p>
-<p class="date">Created: 2022-11-12 Sat 11:13</p>
+<p class="date">Created: 2022-11-12 Sat 11:29</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="http://orgmode.org">Org-mode</a> 9.5.5)</p>
 </div>
 </footer>
