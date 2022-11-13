@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Reading image data in python</title>
 <meta name="generator" content="Org Mode" />
-<link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-light.min.css" />
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
 
 <script src="http://thomasf.github.io/solarized-css/org-info.min.js">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
@@ -36,25 +36,25 @@ org_html_manager.setup();  // activate after the parameters are set
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org5002ecc">Limitation of matplotlib.pyplot.imread</a>
+<li><a href="#org46657d5">Limitation of matplotlib.pyplot.imread</a>
 <ul>
-<li><a href="#org9284454">imageio.imread reads 3D properly</a></li>
-<li><a href="#orga244f65">matplotlib</a></li>
+<li><a href="#org4f9ef97">imageio.imread reads 3D properly</a></li>
+<li><a href="#orgfd99822">matplotlib</a></li>
 </ul>
 </li>
-<li><a href="#org532875c">scikit-image</a></li>
-<li><a href="#org9a1dd26">Other two options</a>
+<li><a href="#orgf91c000">scikit-image</a></li>
+<li><a href="#org854ada3">Other two options</a>
 <ul>
-<li><a href="#org8b53f82">tifffile</a>
+<li><a href="#orgcea8f80">tifffile</a>
 <ul>
-<li><a href="#org92a8eba">Tiles</a></li>
+<li><a href="#orgbb1d1dc">Tiles</a></li>
 </ul>
 </li>
-<li><a href="#orgb267212">bioformat</a></li>
+<li><a href="#org7741cbb">bioformat</a></li>
 </ul>
 </li>
-<li><a href="#orgdab7460">Conclusions</a></li>
-<li><a href="#org7f6cb80">publish</a></li>
+<li><a href="#orgc27ecc7">Conclusions</a></li>
+<li><a href="#org3370f96">publish</a></li>
 </ul>
 </div>
 </div>
@@ -72,18 +72,18 @@ org_html_manager.setup();  // activate after the parameters are set
 </pre>
 </div>
 
-<div id="outline-container-org5002ecc" class="outline-2">
-<h2 id="org5002ecc">Limitation of matplotlib.pyplot.imread</h2>
-<div class="outline-text-2" id="text-org5002ecc">
+<div id="outline-container-org46657d5" class="outline-2">
+<h2 id="org46657d5">Limitation of matplotlib.pyplot.imread</h2>
+<div class="outline-text-2" id="text-org46657d5">
 <p>
 Using imread() from either scipy.ndimage or maptplotlib.image results in
 importing only the first image of a tif (multichannel) time sequence.
 </p>
 </div>
 
-<div id="outline-container-org9284454" class="outline-3">
-<h3 id="org9284454">imageio.imread reads 3D properly</h3>
-<div class="outline-text-3" id="text-org9284454">
+<div id="outline-container-org4f9ef97" class="outline-3">
+<h3 id="org4f9ef97">imageio.imread reads 3D properly</h3>
+<div class="outline-text-3" id="text-org4f9ef97">
 <div class="org-src-container">
 <pre class="src src-jupyter-python"><span style="color: #75b938; font-weight: bold;">import</span> imageio
 <span style="color: #4695f7;">im</span> = imageio.v3.imread(<span style="color: #41c7b9;">"/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif"</span>)
@@ -99,7 +99,7 @@ max =  4886
 </pre>
 
 
-<div id="org1ac6525" class="figure">
+<div id="orgcd560f6" class="figure">
 <p><img src="img/f1.png" alt="f1.png" />
 </p>
 </div>
@@ -110,9 +110,9 @@ As ndimage.imread does not exist anymore.
 </div>
 </div>
 
-<div id="outline-container-orga244f65" class="outline-3">
-<h3 id="orga244f65">matplotlib</h3>
-<div class="outline-text-3" id="text-orga244f65">
+<div id="outline-container-orgfd99822" class="outline-3">
+<h3 id="orgfd99822">matplotlib</h3>
+<div class="outline-text-3" id="text-orgfd99822">
 <div class="org-src-container">
 <pre class="src src-jupyter-python"><span style="color: #4695f7;">im</span> = matplotlib.image.imread(<span style="color: #41c7b9;">"/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif"</span>)
 <span style="color: #adbcbc; font-weight: bold;">print</span>(<span style="color: #41c7b9;">"ndim = "</span>, im.ndim, <span style="color: #41c7b9;">"\nshape = "</span>, im.shape, <span style="color: #41c7b9;">'\nmax = '</span>, im.<span style="color: #adbcbc; font-weight: bold;">max</span>())
@@ -127,7 +127,7 @@ max =  4886
 </pre>
 
 
-<div id="org1a7a998" class="figure">
+<div id="org8fb8015" class="figure">
 <p><img src="img/f2.png" alt="f2.png" />
 </p>
 </div>
@@ -135,9 +135,9 @@ max =  4886
 </div>
 </div>
 
-<div id="outline-container-org532875c" class="outline-2">
-<h2 id="org532875c">scikit-image</h2>
-<div class="outline-text-2" id="text-org532875c">
+<div id="outline-container-orgf91c000" class="outline-2">
+<h2 id="orgf91c000">scikit-image</h2>
+<div class="outline-text-2" id="text-orgf91c000">
 <div class="org-src-container">
 <pre class="src src-jupyter-python"><span style="color: #75b938; font-weight: bold;">from</span> skimage <span style="color: #75b938; font-weight: bold;">import</span> io
 <span style="color: #4695f7;">im</span> = io.imread(<span style="color: #41c7b9;">"/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif"</span>)
@@ -153,20 +153,20 @@ max =  4886
 </pre>
 
 
-<div id="org700774b" class="figure">
+<div id="orgad13b6b" class="figure">
 <p><img src="img/f3.png" alt="f3.png" />
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org9a1dd26" class="outline-2">
-<h2 id="org9a1dd26">Other two options</h2>
-<div class="outline-text-2" id="text-org9a1dd26">
+<div id="outline-container-org854ada3" class="outline-2">
+<h2 id="org854ada3">Other two options</h2>
+<div class="outline-text-2" id="text-org854ada3">
 </div>
-<div id="outline-container-org8b53f82" class="outline-3">
-<h3 id="org8b53f82">tifffile</h3>
-<div class="outline-text-3" id="text-org8b53f82">
+<div id="outline-container-orgcea8f80" class="outline-3">
+<h3 id="orgcea8f80">tifffile</h3>
+<div class="outline-text-3" id="text-orgcea8f80">
 <div class="org-src-container">
 <pre class="src src-jupyter-python"><span style="color: #75b938; font-weight: bold;">import</span> tifffile
 <span style="color: #4695f7;">im</span> = tifffile.imread(<span style="color: #41c7b9;">"/home/dati/liaisan/data/160304/HEK293_ClopHensor-pBJ1_MatraS_attempt/10x_200_200_200/c1.tif"</span>)
@@ -182,15 +182,15 @@ max =  4886
 </pre>
 
 
-<div id="org1c270de" class="figure">
+<div id="org49652eb" class="figure">
 <p><img src="img/f4.png" alt="f4.png" />
 </p>
 </div>
 </div>
 
-<div id="outline-container-org92a8eba" class="outline-4">
-<h4 id="org92a8eba">Tiles</h4>
-<div class="outline-text-4" id="text-org92a8eba">
+<div id="outline-container-orgbb1d1dc" class="outline-4">
+<h4 id="orgbb1d1dc">Tiles</h4>
+<div class="outline-text-4" id="text-orgbb1d1dc">
 <div class="org-src-container">
 <pre class="src src-jupyter-python"><span style="color: #4695f7;">im</span> = tifffile.imread(<span style="color: #41c7b9;">"/home/dati/marta/efrem/20160620/efrem/gap20/t2_1.tif"</span>)
 tifffile.imshow(im)
@@ -198,7 +198,7 @@ tifffile.imshow(im)
 </div>
 
 
-<div id="orgcb1cb1b" class="figure">
+<div id="orgf4a5032" class="figure">
 <p><img src="img/f5.png" alt="f5.png" />
 </p>
 </div>
@@ -225,9 +225,9 @@ TiffFile 'SHA256…aa2.tif'  41.95 MiB  ome multipage uniform  81 Pages  9 Serie
 </div>
 
 
-<div id="outline-container-orgb267212" class="outline-3">
-<h3 id="orgb267212">bioformat</h3>
-<div class="outline-text-3" id="text-orgb267212">
+<div id="outline-container-org7741cbb" class="outline-3">
+<h3 id="org7741cbb">bioformat</h3>
+<div class="outline-text-3" id="text-org7741cbb">
 <div class="org-src-container">
 <pre class="src src-jupyter-python"><span style="color: #75b938; font-weight: bold;">import</span> javabridge
 <span style="color: #75b938; font-weight: bold;">import</span> bioformats
@@ -245,7 +245,7 @@ javabridge.kill_vm()
 <pre class="example">
 ---------------------------------------------------------------------------
 ModuleNotFoundError                       Traceback (most recent call last)
-Cell In [567], line 1
+Cell In [575], line 1
 ----&gt; 1 import javabridge
       2 import bioformats
       3 javabridge.start_vm(class_path=bioformats.JARS)
@@ -256,9 +256,9 @@ ModuleNotFoundError: No module named 'javabridge'
 </div>
 </div>
 
-<div id="outline-container-orgdab7460" class="outline-2">
-<h2 id="orgdab7460">Conclusions</h2>
-<div class="outline-text-2" id="text-orgdab7460">
+<div id="outline-container-orgc27ecc7" class="outline-2">
+<h2 id="orgc27ecc7">Conclusions</h2>
+<div class="outline-text-2" id="text-orgc27ecc7">
 <p>
 Scikit-image is the winner (over scipy.ndimage and matplotlib.image) when importing microscopy data tiff stacks (multiplanes, multichannels, multitime points).
 </p>
@@ -270,9 +270,9 @@ skimage conventions are <a href="http://scikit-image.org/docs/dev/user_guide/num
 </div>
 
 
-<div id="outline-container-org7f6cb80" class="outline-2">
-<h2 id="org7f6cb80">publish</h2>
-<div class="outline-text-2" id="text-org7f6cb80">
+<div id="outline-container-org3370f96" class="outline-2">
+<h2 id="org3370f96">publish</h2>
+<div class="outline-text-2" id="text-org3370f96">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #72898f;">;; </span><span style="color: #72898f;">Load the publishing system</span>
 (<span style="color: #75b938; font-weight: bold;">require</span> '<span style="color: #4695f7; font-weight: bold;">ox-publish</span>)
